@@ -16,7 +16,7 @@ def login():
 	expect = {"code": 200, "msg": "登录成功"}
 	response = requests.post(url=url, json=data)
 	res = response.json() if response.status_code == 200 else {}
-	print("login success")
+	print("登录成功，测试开始！")
 	try:
 		assert res.get("code") == expect["code"]
 		assert res.get("msg") == expect["msg"]
@@ -28,3 +28,18 @@ def login():
 def teardown():
 	yield
 	print("测试结束，断开连接！")
+	
+	
+@pytest.fixture()
+def close_(request):
+	print("测试已经结束！")
+	
+	def fin1():
+		print("准备调用close1函数！")
+		
+	def fin2():
+		print("准备调用close2函数！")
+		
+	request.addfinalizer(fin1)
+	request.addfinalizer(fin2)
+	return close_
